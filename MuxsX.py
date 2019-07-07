@@ -13,6 +13,11 @@ class vars(enum.Enum):
     SPC = list('._-')
     Split =','
     NoPath = 'No Path'
+    NoDefu = 'No Default'
+    h_del = 'Delete specified characters，Ex -d xxx or -d xxx,yyy,zzz'
+    h_pat = 'Specify the file path, which can be a folder or file name'
+    h_add = 'Add string to file name'
+    h_rex = 'Replace the string specified in the file name'
 
 class globsFb:
     """ list all file from path """
@@ -26,10 +31,10 @@ class argsx:
     __Args = None
     def __init__(self):
         parg = argparse.ArgumentParser(prog='MuxsX.py', description='MuxsX by FeelingVi 1.2', usage='lifelse')
-        parg.add_argument('-d', dest='del_str', help='del string', type=str)
-        parg.add_argument('-a', dest='add_str', help='add string', type=str)
-        parg.add_argument('-r', dest='rex_str', help='rex string', type=str)
-        parg.add_argument('xPth', help='pth string', type=str)
+        parg.add_argument('-d', help=vars.h_del.value, type=str)
+        parg.add_argument('-a', help=vars.h_add.value, type=str)
+        parg.add_argument('-r', help=vars.h_rex.value, type=str)
+        parg.add_argument('path', help=vars.h_pat.value, type=str, nargs='*')
         self.__Args = parg.parse_args()
 
 
@@ -38,8 +43,6 @@ class argsx:
             print('{:.<20}: {}'.format('[A]' + k, v))
             if v is not None:
                 self.__FixAgs[k] = v
-
-        
         print(self.__FixAgs)
 
 

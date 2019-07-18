@@ -51,7 +51,7 @@ class argsx:
             fsx_na = os.path.basename(fsx_a)
             fsx_ls = os.path.dirname(fsx_a)
             rfs['0x{:02}'.format(inx)] = {'dir':fsx_ls,'ext':fsx_ext,'on':fsx_na,'n2':fsx_na}
-            print('[C]{:.<17}: {} {}'.format(fsx_na, fsx_na, fsx_ls))
+            print('{:.<20}: {} {}'.format('[C]'+fsx_na, fsx_na, fsx_ls))
             inx += 1
         return rfs
 

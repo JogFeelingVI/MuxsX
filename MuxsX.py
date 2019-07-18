@@ -7,6 +7,7 @@
 import argparse
 import enum
 import pathlib
+import os
 
 class vars(enum.Enum):
     d = list('0123456789')
@@ -40,8 +41,19 @@ class argsx:
         FxPth = self.__FixAgs.get('path')
         Path = pathlib.Path(FxPth)
         files = list(Path.glob(type))
-        print('{:.<20}: {}'.format('[E]File', files[0]))
+        print('{:.<20}: {}'.format('[F]File', files.__len__()))
         return files
+
+    def __any_file_name(self, files:list) -> dict:
+        rfs, inx = {}, 0
+        for fsx in files:
+            fsx_a, fsx_ext = os.path.splitext(fsx)
+            fsx_na = os.path.basename(fsx_a)
+            fsx_ls = os.path.dirname(fsx_a)
+            rfs['0x{:02}'.format(inx)] = {'dir':fsx_ls,'ext':fsx_ext,'on':fsx_na,'n2':fsx_na}
+            print('[C]{:.<17}: {} {}'.format(fsx_na, fsx_na, fsx_ls))
+            inx += 1
+        return rfs
 
     def load_args(self):
         for k, v in self.__Args.__dict__.items():
@@ -50,8 +62,9 @@ class argsx:
                 print('{:.<20}: {}'.format('[A]' + k, v))
         #开始处理需要处理的参数
         #path
-        self.files = self.__glob_file(self.__FixAgs.get('type'))
-        print('{:.<20}: {}'.format('[F]File', self.files.__len__()))
+        files = self.__glob_file(self.__FixAgs.get('type'))
+        files = self.__any_file_name(files)
+        # 分析字符串
 
 
 

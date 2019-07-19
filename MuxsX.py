@@ -9,11 +9,12 @@ import enum
 import pathlib
 import os
 
+
 class vars(enum.Enum):
     d = list('0123456789')
-    def_type = '*.jpg' # 任意文件 但不包含文件夹
+    def_type = '*.*'  # 任意文件 但不包含文件夹
     SPC = list('._-')
-    Split =','
+    Split = ','
     NoPath = 'No Path'
     NoDefu = 'No Default'
     h_del = 'Delete specified characters，Ex -d xxx or -d xxx,yyy,zzz'
@@ -25,8 +26,9 @@ class vars(enum.Enum):
 
 class argsx:
     """ 参数设定 """
-    __FixAgs = {'base64':'bGlmZWxzZQ=='}
+    __FixAgs = {'base64': 'bGlmZWxzZQ=='}
     __Args = None
+
     def __init__(self):
         parg = argparse.ArgumentParser(prog='MuxsX.py', description='MuxsX by FeelingVi 1.2', usage='lifelse')
         parg.add_argument('-d', dest='del', help=vars.h_del.value, type=str)
@@ -34,43 +36,48 @@ class argsx:
         parg.add_argument('-r', dest='replace', help=vars.h_rex.value, type=str)
         parg.add_argument('-type', dest='type', help=vars.h_typ.value, type=str, default=vars.def_type.value)
 
-        parg.add_argument(dest='path', help=vars.h_pat.value, type=str, default='~/Downloads')
+        parg.add_argument(dest='path', help=vars.h_pat.value, type=str, nargs='?',
+                          default=os.path.expanduser('~/Downloads'))
         self.__Args = parg.parse_args()
 
-    def __glob_file(self, type:str = vars.def_type.value) -> list:
+    def __glob_file(self, type: str = vars.def_type.value) -> list:
         FxPth = self.__FixAgs.get('path')
         Path = pathlib.Path(FxPth)
         files = list(Path.glob(type))
-        print('{:.<20}: {}'.format('[F]File', files.__len__()))
         return files
 
-    def __any_file_name(self, files:list) -> dict:
-        rfs, inx = {}, 0
-        for fsx in files:
-            fsx_a, fsx_ext = os.path.splitext(fsx)
-            fsx_na = os.path.basename(fsx_a)
-            fsx_ls = os.path.dirname(fsx_a)
-            rfs['0x{:02}'.format(inx)] = {'dir':fsx_ls,'ext':fsx_ext,'on':fsx_na,'n2':fsx_na}
-            print('{:.<20}: {} {}'.format('[C]'+fsx_na, fsx_na, fsx_ls))
-            inx += 1
-        return rfs
+    def __any_file_name(self, files: list) -> dict:
+
+        if len(files) is 0:
+            return {}
+        else:
+            rfs, inx = {}, 0
+            print('{:.<20}: {}'.format('[R]any_file_name', files.__len__()))
+            for fsx in files:
+                fsx_a, fsx_ext = os.path.splitext(fsx)
+                fsx_na = os.path.basename(fsx_a)
+                fsx_ls = os.path.dirname(fsx_a)
+                rfs['0x{:02}'.format(inx)] = {'dir': fsx_ls, 'ext': fsx_ext, 'on': fsx_na, 'n2': fsx_na}
+                print('{:.30}'.format('[C]' + fsx_na))
+                inx += 1
+            return rfs
 
     def load_args(self):
         for k, v in self.__Args.__dict__.items():
             if v is not None:
                 self.__FixAgs[k] = v
                 print('{:.<20}: {}'.format('[A]' + k, v))
-        #开始处理需要处理的参数
-        #path
+        # 开始处理需要处理的参数
+        # path
         files = self.__glob_file(self.__FixAgs.get('type'))
         files = self.__any_file_name(files)
         # 分析字符串
 
 
-
 def run_pro():
     pargs = argsx()
     pargs.load_args()
+
 
 if __name__ == '__main__':
     run_pro()

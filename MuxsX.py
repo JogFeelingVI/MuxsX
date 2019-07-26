@@ -59,7 +59,7 @@ class argsx:
                 fsx_ls = os.path.dirname(fsx_a)
                 if fsx_na[0:2] != '._':
                     rfs['0x{:02}'.format(inx)] = {'dir': fsx_ls, 'ext': fsx_ext, 'on': fsx_na, 'n2': fsx_na}
-                    print('{:.<20}: 0x{:<4} {:.30}'.format('[F]FileNa', inx, fsx_na))
+                    print('{:.<20}: 0x{:<4} {}'.format('[F]FileNa', inx, fsx_na))
                     inx += 1
             return rfs
 
@@ -70,7 +70,7 @@ class argsx:
                 if val['ext'] != '':
                     for xDel in sDe:
                         val['n2'] = val['n2'].replace(xDel, '')
-                        print('[C]{:.<17}: {} -> {}'.format(xDel, val['on'], val['n2']))
+                        print('[C]{:.<17}: {}'.format('del', val['n2']))
         return files
 
     def __add_ne__(self, files: dict) -> dict:

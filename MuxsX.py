@@ -84,7 +84,7 @@ class argsx:
                     name = list(val['n2'])
                     name.insert(index, str)
                     val['n2'] = ''.join(name)
-                    print('[C]{:.<17}: {} -> {}'.format('{}@{}'.format(str, index), val['on'], val['n2']))
+                    print('[C]{:.<17}: {}'.format('{}@{}'.format(str, index), val['n2']))
         return files
 
     def __rep_na__(self, files: dict) -> dict:
@@ -98,7 +98,7 @@ class argsx:
                 for k, val in files.items():
                     if val['ext'] != '':
                         val['n2'] = val['n2'].replace(src, rex)
-                        print('[C]{:.<17}: {} -> {}'.format('replace', val['on'], val['n2']))
+                        print('[C]{:.<17}: {}'.format('replace', val['n2']))
         return files
 
     def __os_rename(self, files: dict):

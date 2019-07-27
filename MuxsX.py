@@ -14,6 +14,7 @@ class vars(enum.Enum):
     d = list('0123456789')
     def_type = '*.*'  # 任意文件 但不包含文件夹
     SPC = list('._-')
+    exclude = ('._', '.D')
     Split = ','
     NoPath = 'No Path'
     NoDefu = 'No Default'
@@ -22,6 +23,13 @@ class vars(enum.Enum):
     h_add = 'Add string to file name -a ddd or -a ddd@-5'
     h_rex = 'Replace the string specified in the file name -r xxx:yyyy'
     h_typ = 'Specify file type'
+
+
+class outscr:
+    @staticmethod
+    def out(name, msg):
+        if name is not '' and msg is not '':
+            print('{0:.<30}: {1:.40}'.format(name, str(msg)))
 
 
 class argsx:
@@ -52,14 +60,14 @@ class argsx:
             return {}
         else:
             rfs, inx = {}, 0
-            print('{:.<20}: {}'.format('[R]any_file_name', files.__len__()))
+            outscr.out('analysis file name', files.__len__())
             for fsx in files:
                 fsx_a, fsx_ext = os.path.splitext(fsx)
                 fsx_na = os.path.basename(fsx_a)
                 fsx_ls = os.path.dirname(fsx_a)
-                if fsx_na[0:2] != '._':
+                if fsx_na[0:2] not in vars.exclude.value:
                     rfs['0x{:02}'.format(inx)] = {'dir': fsx_ls, 'ext': fsx_ext, 'on': fsx_na, 'n2': fsx_na}
-                    print('{:.<20}: 0x{:<4} {}'.format('[F]FileNa', inx, fsx_na))
+                    outscr.out('file name', '0x{:>4} {}'.format(inx, fsx_na))
                     inx += 1
             return rfs
 
@@ -70,7 +78,8 @@ class argsx:
                 if val['ext'] != '':
                     for xDel in sDe:
                         val['n2'] = val['n2'].replace(xDel, '')
-                        print('[C]{:.<17}: {}'.format('del', val['n2']))
+                        outscr.out('delete', val['n2'])
+                        # print('[C]{:.<17}: {}'.format('del', val['n2']))
         return files
 
     def __add_ne__(self, files: dict) -> dict:
@@ -84,7 +93,8 @@ class argsx:
                     name = list(val['n2'])
                     name.insert(index, str)
                     val['n2'] = ''.join(name)
-                    print('[C]{:.<17}: {}'.format('{}@{}'.format(str, index), val['n2']))
+                    outscr.out('{}@{}'.format(str, index), val['n2'])
+                    # print('[C]{:.<17}: {}'.format('{}@{}'.format(str, index), val['n2']))
         return files
 
     def __rep_na__(self, files: dict) -> dict:
@@ -93,12 +103,14 @@ class argsx:
             try:
                 src, rex = self.__FixAgs['replace'].split('#')
             except:
-                print('[E]{:.<17}: {} exps x#y'.format('replace', self.__FixAgs['replace']))
+                # print('[E]{:.<17}: {} exps x#y'.format('√', self.__FixAgs['replace']))
+                outscr.out('replace error', self.__FixAgs['replace'])
             else:
                 for k, val in files.items():
                     if val['ext'] != '':
                         val['n2'] = val['n2'].replace(src, rex)
-                        print('[C]{:.<17}: {}'.format('replace', val['n2']))
+                        # print('[C]{:.<17}: {}'.format('ç', val['n2']))
+                        outscr.out('replace', val['n2'])
         return files
 
     def __os_rename(self, files: dict):
@@ -115,13 +127,14 @@ class argsx:
                     error += 1
                 else:
                     done += 1
-            print('[D]{:.<17}: Done {} Error {}'.format('complete', done, error))
+            outscr.out('complete', 'Done {} Error {}'.format(done, error))
 
     def load_args(self):
         for k, v in self.__Args.__dict__.items():
             if v is not None:
                 self.__FixAgs[k] = v
-                print('{:.<20}: {}'.format('[A]' + k, v))
+                # print('{:.<20}: {}'.format('[A]' + k, v))
+                outscr.out(k, v)
         # 开始处理需要处理的参数
         files = self.__glob_file(self.__FixAgs.get('type'))
         files = self.__any_file_name(files)
@@ -145,8 +158,8 @@ class argsx:
 
 
 def run_pro():
-    pargs = argsx()
-    pargs.load_args()
+    paras = argsx()
+    paras.load_args()
 
 
 if __name__ == '__main__':

@@ -93,7 +93,7 @@ class argsx:
                     if val['ext'] != '':
                         for xDel in lines:
                             val['n2'] = val['n2'].replace(xDel, '')
-                            outscr.out('delete', xDel)
+                            outscr.out('delete for dict', xDel)
 
         return files
 

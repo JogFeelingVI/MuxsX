@@ -68,7 +68,6 @@ class argsx:
                 fsx_ls = os.path.dirname(fsx_a)
                 if fsx_na[0:2] not in vars.exclude.value:
                     rfs['0x{:02}'.format(inx)] = {'dir': fsx_ls, 'ext': fsx_ext, 'on': fsx_na, 'n2': fsx_na}
-                    outscr.out('file name', '0x{:>4} {}'.format(inx, fsx_na))
                     inx += 1
             return rfs
 
@@ -79,8 +78,7 @@ class argsx:
                 if val['ext'] != '':
                     for xDel in sDe:
                         val['n2'] = val['n2'].replace(xDel, '')
-                        outscr.out('delete', xDel)
-                        # print('[C]{:.<17}: {}'.format('del', val['n2']))
+                outscr.out('delete', val['n2'])
         return files
 
     def __delx_ne__(self, files: dict) -> dict:
@@ -93,8 +91,7 @@ class argsx:
                     if val['ext'] != '':
                         for xDel in lines:
                             val['n2'] = val['n2'].replace(xDel, '')
-                            outscr.out('delete for dict', xDel)
-
+                    outscr.out('delete for dict', val['n2'])
         return files
 
     def __add_ne__(self, files: dict) -> dict:
@@ -108,8 +105,7 @@ class argsx:
                     name = list(val['n2'])
                     name.insert(index, str)
                     val['n2'] = ''.join(name)
-                    outscr.out('{}@{}'.format(str, index), val['n2'])
-                    # print('[C]{:.<17}: {}'.format('{}@{}'.format(str, index), val['n2']))
+                outscr.out('Add string', val['n2'])
         return files
 
     def __rep_na__(self, files: dict) -> dict:
@@ -125,7 +121,7 @@ class argsx:
                     if val['ext'] != '':
                         val['n2'] = val['n2'].replace(src, rex)
                         # print('[C]{:.<17}: {}'.format('ç', val['n2']))
-                        outscr.out('replace', val['n2'])
+                    outscr.out('replace', val['n2'])
         return files
 
     def __os_rename(self, files: dict):

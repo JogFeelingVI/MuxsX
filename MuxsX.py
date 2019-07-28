@@ -23,6 +23,7 @@ class vars(enum.Enum):
     h_add = 'Add string to file name -a ddd or -a ddd@-5'
     h_rex = 'Replace the string specified in the file name -r xxx:yyyy'
     h_typ = 'Specify file type'
+    h_delx = 'Read the file to delete the list, then modify the file -dx ~/deldict'
 
 
 class outscr:
@@ -43,7 +44,7 @@ class argsx:
         parg.add_argument('-a', dest='add', help=vars.h_add.value, type=str)
         parg.add_argument('-r', dest='replace', help=vars.h_rex.value, type=str)
         parg.add_argument('-type', dest='type', help=vars.h_typ.value, type=str, default=vars.def_type.value)
-
+        parg.add_argument('-dx', dest='delete_x', help=vars.h_delx.value, type=str)
         parg.add_argument(dest='path', help=vars.h_pat.value, type=str, nargs='?',
                           default=os.path.expanduser('~/Downloads'))
         self.__Args = parg.parse_args()
@@ -78,8 +79,22 @@ class argsx:
                 if val['ext'] != '':
                     for xDel in sDe:
                         val['n2'] = val['n2'].replace(xDel, '')
-                        outscr.out('delete', val['n2'])
+                        outscr.out('delete', xDel)
                         # print('[C]{:.<17}: {}'.format('del', val['n2']))
+        return files
+
+    def __delx_ne__(self, files: dict) -> dict:
+        '''读取文件并更具文件内容修改文件内容名称'''
+        if 'delete_x' in self.__FixAgs.keys():
+            with open(self.__FixAgs['delete_x'], 'r') as reads:
+                lines = reads.read().split('\n')
+                outscr.out('delete dict', lines.__len__())
+                for k, val in files.items():
+                    if val['ext'] != '':
+                        for xDel in lines:
+                            val['n2'] = val['n2'].replace(xDel, '')
+                            outscr.out('delete', xDel)
+
         return files
 
     def __add_ne__(self, files: dict) -> dict:
@@ -141,7 +156,8 @@ class argsx:
         rode = {
             'del': lambda fs: self.__del_ne__(fs),
             'add': lambda fs: self.__add_ne__(fs),
-            'replace': lambda fs: self.__rep_na__(fs)
+            'replace': lambda fs: self.__rep_na__(fs),
+            'delete_x': lambda fs: self.__delx_ne__(fs),
         }
         changes = []
         for key in self.__FixAgs.keys():

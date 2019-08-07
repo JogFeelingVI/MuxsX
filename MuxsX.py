@@ -78,6 +78,15 @@ class argsx:
 						  default=os.path.expanduser('~/Downloads'))
 		self.__Args = parg.parse_args()
 
+
+	@staticmethod
+	def x037(tx):
+		return colortable.Coloring(0, 37, 0, tx)
+
+	@staticmethod
+	def x036(tx):
+		return colortable.Coloring(0, 36, 0, tx)
+
 	@staticmethod
 	def x035(tx):
 		return colortable.Coloring(0, 35, 0, tx)
@@ -195,7 +204,7 @@ class argsx:
 		for k, v in self.__Args.__dict__.items():
 			if v is not None:
 				self.__FixAgs[k] = v
-				outscr.out(k, self.x032(v))
+				outscr.out(k, self.x036(v))
 		# 开始处理需要处理的参数
 		files = self.__glob_file(self.__FixAgs.get('type'))
 		files = self.__any_file_name(files)

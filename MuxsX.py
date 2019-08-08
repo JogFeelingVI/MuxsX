@@ -40,7 +40,7 @@ class colortable:
 		bc = b if b in colortable.bg or b is 0 else 40
 		msg = str(s)
 		code = ';'.join([str(md), str(fc), str(bc)]) if b is not 0 else ';'.join([str(md), str(fc)])
-		return '\x1b[{code}m {t} \x1b[0m'.format(code=code, t=msg)
+		return '\x1b[{c}m {t} \x1b[0m'.format(c=code, t=msg)
 
 	@staticmethod
 	def legend():

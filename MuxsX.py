@@ -58,7 +58,7 @@ class outscr:
 	@staticmethod
 	def out(name, msg):
 		if name is not '' and msg is not '':
-			print('{0:.<30}: {1:.40}'.format(name, str(msg)))
+			print('{0:.<30}:{1}'.format(name, str(msg)))
 
 
 class argsx:
@@ -78,6 +78,9 @@ class argsx:
 						  default=os.path.expanduser('~/Downloads'))
 		self.__Args = parg.parse_args()
 
+	@staticmethod
+	def x233(tx):
+		return colortable.Coloring(2, 33, 0, tx)
 
 	@staticmethod
 	def x037(tx):
@@ -119,7 +122,7 @@ class argsx:
 			return {}
 		else:
 			rfs, inx = {}, 0
-			outscr.out('analysis file name', self.x031(len(files)))
+			outscr.out('analysis file name', self.x031(files.__len__()))
 			for fsx in files:
 				fsx_a, fsx_ext = os.path.splitext(fsx)
 				fsx_na = os.path.basename(fsx_a)
@@ -182,7 +185,7 @@ class argsx:
 				for k, val in files.items():
 					if val['ext'] != '':
 						val['n2'] = val['n2'].replace(src, rex)
-					outscr.out('replace', self.x031(val['n2']))
+					outscr.out('replace', self.x033(val['n2']))
 		return files
 
 	def __os_rename(self, files: dict):
@@ -204,7 +207,7 @@ class argsx:
 		for k, v in self.__Args.__dict__.items():
 			if v is not None:
 				self.__FixAgs[k] = v
-				outscr.out(k, self.x036(v))
+				outscr.out(k, self.x233(v))
 		# 开始处理需要处理的参数
 		files = self.__glob_file(self.__FixAgs.get('type'))
 		files = self.__any_file_name(files)

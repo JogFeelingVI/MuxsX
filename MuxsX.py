@@ -153,12 +153,12 @@ class argsx:
 		if 'delete_x' in self.__FixAgs.keys():
 			with open(self.__FixAgs['delete_x'], 'r') as reads:
 				lines = reads.read().split('\n')
-				outscr.out('delete dict', self.x034(len(lines)))
+				outscr.out('dictionary', self.x034(len(lines)))
 				for k, val in files.items():
 					if val['ext'] != '':
 						for xDel in lines:
 							val['n2'] = val['n2'].replace(xDel, '')
-					outscr.out('delete for dict', self.x033(val['n2']))
+					outscr.out('delete with dictionary', self.x033(val['n2']))
 		return files
 
 	def __add_ne__(self, files: dict) -> dict:

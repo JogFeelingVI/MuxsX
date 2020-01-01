@@ -136,7 +136,7 @@ class argsx:
 	def __print__(self, files: dict) -> dict:
 		if self.__FixAgs['print'] is True:
 			for k, v in files.items():
-				msgs = v['n2'] if len(v['n2']) < 55 else v['n2'][0:55]
+				msgs = v['n2'] if len(v['n2']) < 55 else '{}...?'.format(v['n2'][0:55])
 				outscr.out(k, self.x034(msgs))
 		return files
 

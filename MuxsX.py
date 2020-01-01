@@ -114,7 +114,8 @@ class argsx:
 		FxPth = self.__FixAgs.get('path')
 		FxPth = FxPth if FxPth.find('~') == -1 else os.path.expanduser(FxPth)
 		Path = pathlib.Path(FxPth)
-		files = list(Path.glob(type))
+		exFex = type if type[0] == '*' else '*.{}'.format(type)
+		files = list(Path.glob(exFex))
 		return files
 
 	def __any_file_name(self, files: list) -> dict:
@@ -135,7 +136,8 @@ class argsx:
 	def __print__(self, files: dict) -> dict:
 		if self.__FixAgs['print'] is True:
 			for k, v in files.items():
-				outscr.out(k, self.x034(v['n2']))
+				msgs = v['n2'] if len(v['n2']) < 55 else v['n2'][0:55]
+				outscr.out(k, self.x034(msgs))
 		return files
 
 	def __del_ne__(self, files: dict) -> dict:

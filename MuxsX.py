@@ -232,7 +232,7 @@ class argsx:
 		if sum(changes) != 0:
 			self.__os_rename(files)
 
-		
+
 def run_pro():
 	paras = argsx()
 	paras.load_args()

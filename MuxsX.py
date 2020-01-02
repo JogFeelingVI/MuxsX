@@ -111,11 +111,10 @@ class argsx:
 		return colortable.Coloring(0, 31, 0, tx)
 
 	def __glob_file(self, type: str = vars.def_type.value) -> list:
-		FxPth = self.__FixAgs.get('path')
-		FxPth = FxPth if FxPth.find('~') == -1 else os.path.expanduser(FxPth)
+		FxPth = os.path.expanduser(self.__FixAgs.get('path'))
 		Path = pathlib.Path(FxPth)
 		exFex = type if type[0] == '*' else '*.{}'.format(type)
-		files = list(Path.glob(exFex))
+		files = [x for x in Path.glob(exFex) if x.is_file()]
 		return files
 
 	def __any_file_name(self, files: list) -> dict:
@@ -182,7 +181,7 @@ class argsx:
 			try:
 				src, rex = self.__FixAgs['replace'].split('#')
 			except:
-				outscr.out('replace error', self.__FixAgs['replace'])
+				outscr.out('replace error', self.x031(self.__FixAgs['replace']))
 			else:
 				for k, val in files.items():
 					if val['ext'] != '':
@@ -198,7 +197,8 @@ class argsx:
 					if val['ext'] != '':
 						onp = '{0[dir]}/{0[on]}{0[ext]}'.format(val)
 						n2p = '{0[dir]}/{0[n2]}{0[ext]}'.format(val)
-						os.rename(onp, n2p)
+						if onp != n2p:
+							os.rename(onp, n2p)
 				except:
 					error += 1
 				else:

@@ -229,10 +229,10 @@ class argsx:
 					changes.append(0)
 				else:
 					changes.append(1)
-		if sum(changes) > 0:
+		if sum(changes) != 0:
 			self.__os_rename(files)
 
-
+		
 def run_pro():
 	paras = argsx()
 	paras.load_args()

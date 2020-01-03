@@ -220,17 +220,10 @@ class argsx:
 			'delete_x': lambda fs: self.__delx_ne__(fs),
 			'print': lambda fs: self.__print__(fs)
 		}
-		changes = []
 		for key in self.__FixAgs.keys():
 			if key in rode.keys():
-				try:
-					files = rode[key](files)
-				except:
-					changes.append(0)
-				else:
-					changes.append(1)
-		if sum(changes) != 0:
-			self.__os_rename(files)
+				files = rode[key](files)
+		self.__os_rename(files)
 
 
 def run_pro():

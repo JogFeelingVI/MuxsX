@@ -179,7 +179,7 @@ class argsx:
 	def __rep_na__(self, files: dict) -> dict:
 		if 'replace' in self.__FixAgs.keys():
 			try:
-				src, rex = self.__FixAgs['replace'].split('#')
+				src, rex = self.__FixAgs['replace'].split(':')
 			except:
 				outscr.out('replace error', self.x031(self.__FixAgs['replace']))
 			else:

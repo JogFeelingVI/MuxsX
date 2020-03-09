@@ -40,7 +40,7 @@ class colortable:
 		bc = b if b in colortable.bg or b is 0 else 40
 		msg = str(s)
 		code = ';'.join([str(md), str(fc), str(bc)]) if bc is not 0 else ';'.join([str(md), str(fc)])
-		return '\x1b[{c}m {t} \x1b[0m'.format(c=code, t=msg)
+		return '\x1b[{c}m{t} \x1b[0m'.format(c=code, t=msg)
 
 	@staticmethod
 	def legend():
@@ -58,7 +58,13 @@ class outscr:
 	@staticmethod
 	def out(name, msg):
 		if name is not '' and msg is not '':
-			print('{0:.<30}:{1}'.format(name, str(msg)))
+			names = name.rjust(20)
+			msgs = f' {msg}'
+			print(f'[{outscr.cyan(names)}]:{msgs}')
+
+	@staticmethod
+	def cyan(tx):
+		return colortable.Coloring(0, 36, 0, tx)
 
 
 class argsx:
@@ -79,35 +85,35 @@ class argsx:
 		self.__Args = parg.parse_args()
 
 	@staticmethod
-	def x233(tx):
-		return colortable.Coloring(2, 33, 0, tx)
+	def golden(tx):
+		return colortable.Coloring(3, 33, 0, tx)
 
 	@staticmethod
-	def x037(tx):
+	def white(tx):
 		return colortable.Coloring(0, 37, 0, tx)
 
 	@staticmethod
-	def x036(tx):
+	def cyan(tx):
 		return colortable.Coloring(0, 36, 0, tx)
 
 	@staticmethod
-	def x035(tx):
+	def pink(tx):
 		return colortable.Coloring(0, 35, 0, tx)
 
 	@staticmethod
-	def x034(tx):
+	def blue(tx):
 		return colortable.Coloring(0, 34, 0, tx)
 
 	@staticmethod
-	def x033(tx):
+	def yellow(tx):
 		return colortable.Coloring(0, 33, 0, tx)
 
 	@staticmethod
-	def x032(tx):
+	def greed(tx):
 		return colortable.Coloring(0, 32, 0, tx)
 
 	@staticmethod
-	def x031(tx):
+	def red(tx):
 		return colortable.Coloring(0, 31, 0, tx)
 
 	def __glob_file(self, type: str = vars.def_type.value) -> list:
@@ -122,7 +128,7 @@ class argsx:
 			return {}
 		else:
 			rfs, inx = {}, 0
-			outscr.out('analysis file name', self.x031(files.__len__()))
+			outscr.out('analysis file name', self.red(files.__len__()))
 			for fsx in files:
 				fsx_a, fsx_ext = os.path.splitext(fsx)
 				fsx_na = os.path.basename(fsx_a)
@@ -136,7 +142,7 @@ class argsx:
 		if self.__FixAgs['print'] is True:
 			for k, v in files.items():
 				msgs = v['n2'] if len(v['n2']) < 55 else '{}...?'.format(v['n2'][0:55])
-				outscr.out(k, self.x034(msgs))
+				outscr.out(k, self.blue(msgs))
 		return files
 
 	def __del_ne__(self, files: dict) -> dict:
@@ -146,7 +152,7 @@ class argsx:
 				if val['ext'] != '':
 					for xDel in sDe:
 						val['n2'] = val['n2'].replace(xDel, '')
-				outscr.out('delete string', self.x033(val['n2']))
+				outscr.out('delete string', self.yellow(val['n2']))
 		return files
 
 	def __delx_ne__(self, files: dict) -> dict:
@@ -154,12 +160,12 @@ class argsx:
 		if 'delete_x' in self.__FixAgs.keys():
 			with open(self.__FixAgs['delete_x'], 'r') as reads:
 				lines = reads.read().split('\n')
-				outscr.out('dictionary', self.x034(len(lines)))
+				outscr.out('dictionary', self.blue(len(lines)))
 				for k, val in files.items():
 					if val['ext'] != '':
 						for xDel in lines:
 							val['n2'] = val['n2'].replace(xDel, '')
-					outscr.out('delete with dictionary', self.x033(val['n2']))
+					outscr.out('delete with dictionary', self.yellow(val['n2']))
 		return files
 
 	def __add_ne__(self, files: dict) -> dict:
@@ -173,7 +179,7 @@ class argsx:
 					name = list(val['n2'])
 					name.insert(index, str)
 					val['n2'] = ''.join(name)
-				outscr.out('Add string', self.x033(val['n2']))
+				outscr.out('Add string', self.yellow(val['n2']))
 		return files
 
 	def __rep_na__(self, files: dict) -> dict:
@@ -181,12 +187,12 @@ class argsx:
 			try:
 				src, rex = self.__FixAgs['replace'].split(':')
 			except:
-				outscr.out('replace error', self.x031(self.__FixAgs['replace']))
+				outscr.out('replace error', self.red(self.__FixAgs['replace']))
 			else:
 				for k, val in files.items():
 					if val['ext'] != '':
 						val['n2'] = val['n2'].replace(src, rex)
-					outscr.out('replace', self.x033(val['n2']))
+					outscr.out('replace', self.yellow(val['n2']))
 		return files
 
 	def __os_rename(self, files: dict):
@@ -203,13 +209,13 @@ class argsx:
 					error += 1
 				else:
 					done += 1
-			outscr.out('complete', self.x034('Done {} Error {}'.format(done, error)))
+			outscr.out('complete', self.blue('Done {} Error {}'.format(done, error)))
 
 	def load_args(self):
 		for k, v in self.__Args.__dict__.items():
 			if v is not None:
 				self.__FixAgs[k] = v
-				outscr.out(k, self.x233(v))
+				outscr.out(k, self.golden(v))
 		# 开始处理需要处理的参数
 		files = self.__glob_file(self.__FixAgs.get('type'))
 		files = self.__any_file_name(files)

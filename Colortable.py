@@ -35,13 +35,13 @@ class colortable:
 	def legend_no_bg():
 		for style in range(8):
 			for fg in range(30, 38):
-				format = ';'.join([str(style), str(fg)])
+				format = ';'.join([str(style), str(fg), str(40)])
 				s1 = '\x1b[%sm %s \x1b[0m' % (format, format)
 				print(s1)
 			print('\n')
 
 
-def main():
+def main(**kwargs):
 	colortable.legend_no_bg()
 
 if __name__ == '__main__':

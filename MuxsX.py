@@ -58,9 +58,9 @@ class outscr:
 	@staticmethod
 	def out(name, msg):
 		if name is not '' and msg is not '':
-			names = name.rjust(25)
-			msgs = f' {msg}'
-			print(f'[{outscr.cyan(names)}]:{msgs}')
+			names = name.center(25)
+			msgs = f'{msg}'
+			print(f'[{outscr.cyan(names)}] {msgs}')
 
 	@staticmethod
 	def cyan(tx):
@@ -165,7 +165,7 @@ class argsx:
 					if val['ext'] != '':
 						for xDel in lines:
 							val['n2'] = val['n2'].replace(xDel, '')
-					outscr.out('delete with dictionary', self.yellow(val['n2']))
+					outscr.out('Commands -dx [file]', self.yellow(val['n2']))
 		return files
 
 	def __add_ne__(self, files: dict) -> dict:

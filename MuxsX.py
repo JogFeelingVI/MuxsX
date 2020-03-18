@@ -7,7 +7,6 @@
 import argparse
 import enum
 import pathlib
-import os
 
 
 class vars(enum.Enum):
@@ -81,7 +80,7 @@ class argsx:
 		parg.add_argument('-dx', dest='delete_x', help=vars.h_delx.value, type=str)
 		parg.add_argument('-p', dest='print', help=vars.h_print.value, action='store_true')
 		parg.add_argument(dest='path', help=vars.h_path.value, type=str, nargs='?',
-						  default=os.path.expanduser('~/Downloads'))
+						  default=pathlib.PosixPath('~/Downloads').expanduser())
 		self.__Args = parg.parse_args()
 
 	@staticmethod
@@ -117,7 +116,11 @@ class argsx:
 		return colortable.Coloring(0, 31, 0, tx)
 
 	def __glob_file(self, type: str = vars.def_type.value) -> list:
-		FxPth = os.path.expanduser(self.__FixAgs.get('path'))
+		FxPth = self.__FixAgs.get('path')
+		if FxPth == './':
+			FxPth = pathlib.PosixPath(FxPth).resolve()
+		elif FxPth.startswith('~/'):
+			FxPth = pathlib.PosixPath(FxPth).expanduser()
 		Path = pathlib.Path(FxPth)
 		exFex = type if type[0] == '*' else '*.{}'.format(type)
 		files = [x for x in Path.glob(exFex) if x.is_file()]
@@ -130,11 +133,12 @@ class argsx:
 			rfs, inx = {}, 0
 			outscr.out('analysis file name', self.red(files.__len__()))
 			for fsx in files:
-				fsx_a, fsx_ext = os.path.splitext(fsx)
-				fsx_na = os.path.basename(fsx_a)
-				fsx_ls = os.path.dirname(fsx_a)
-				if fsx_na[0:2] not in vars.exclude.value:
-					rfs['0x{:02}'.format(inx)] = {'dir': fsx_ls, 'ext': fsx_ext, 'on': fsx_na, 'n2': fsx_na}
+				file = pathlib.PosixPath(fsx)
+				dir = file.parent
+				suffix = file.suffix
+				stem = file.stem
+				if stem[0:2] not in vars.exclude.value and suffix != '':
+					rfs['0x{:02}'.format(inx)] = {'dir': dir, 'ext': suffix, 'on': stem, 'n2': stem}
 					inx += 1
 			return rfs
 
@@ -149,10 +153,16 @@ class argsx:
 		if 'del' in self.__FixAgs.keys():
 			sDe = self.__FixAgs['del'].split(',')
 			for k, val in files.items():
-				if val['ext'] != '':
-					for xDel in sDe:
-						val['n2'] = val['n2'].replace(xDel, '')
-				outscr.out('delete string', self.yellow(val['n2']))
+				logs = []
+				for i, xDel in enumerate(sDe):
+					inx = val['n2'].find(xDel)
+					temp = val['n2'].replace(xDel, '')
+					if val['n2'] != temp:
+						val['n2'] = temp
+						logs.append(f'{i}{inx}')
+				if logs.__len__() != 0:
+					logs_s = ''.join(f'{x}' for x in logs)
+					outscr.out(f'De{logs_s}', self.yellow(val['n2']))
 		return files
 
 	def __delx_ne__(self, files: dict) -> dict:
@@ -162,10 +172,15 @@ class argsx:
 				lines = reads.read().split('\n')
 				outscr.out('dictionary', self.blue(len(lines)))
 				for k, val in files.items():
-					if val['ext'] != '':
-						for xDel in lines:
-							val['n2'] = val['n2'].replace(xDel, '')
-					outscr.out('Commands -dx [file]', self.yellow(val['n2']))
+					logs = []
+					for i, xDel in enumerate(lines):
+						temp = val['n2'].replace(xDel, '')
+						if val['n2'] != temp:
+							val['n2'] = temp
+							logs.append(i)
+					if logs.__len__() != 0:
+						logs_s = ''.join(f'{x}' for x in logs)
+						outscr.out(f'Dx{logs_s}', self.yellow(val['n2']))
 		return files
 
 	def __add_ne__(self, files: dict) -> dict:
@@ -174,12 +189,14 @@ class argsx:
 			cmds = cmds if len(cmds) >= 2 else [cmds[0], 0]
 			str, index = cmds
 			for k, val in files.items():
-				if val['ext'] != '':
-					index = int(index)
-					name = list(val['n2'])
-					name.insert(index, str)
-					val['n2'] = ''.join(name)
-				outscr.out('Add string', self.yellow(val['n2']))
+				index = int(index)
+				name = list(val['n2'])
+				name.insert(index, str)
+				temp = ''.join(name)
+				if val['n2'] != temp:
+					val['n2'] = temp
+					inx = temp.find(str)
+					outscr.out(f'{str}{inx}', self.yellow(val['n2']))
 		return files
 
 	def __rep_na__(self, files: dict) -> dict:
@@ -190,26 +207,35 @@ class argsx:
 				outscr.out('replace error', self.red(self.__FixAgs['replace']))
 			else:
 				for k, val in files.items():
-					if val['ext'] != '':
-						val['n2'] = val['n2'].replace(src, rex)
-					outscr.out('replace', self.yellow(val['n2']))
+					temp = val['n2'].replace(src, rex)
+					if val['n2'] != temp:
+						val['n2'] = temp
+						inx = temp.find(rex)
+						outscr.out(f'{rex}/{inx}', self.yellow(val['n2']))
 		return files
 
 	def __os_rename(self, files: dict):
 		if files.items().__len__() != 0:
-			done, error = [0, 0]
+			done, error, nochang = [0, 0, 0]
 			for k, val in files.items():
 				try:
 					if val['ext'] != '':
 						onp = '{0[dir]}/{0[on]}{0[ext]}'.format(val)
 						n2p = '{0[dir]}/{0[n2]}{0[ext]}'.format(val)
 						if onp != n2p:
-							os.rename(onp, n2p)
+							o_file = pathlib.PosixPath(onp)
+							target = pathlib.PosixPath(n2p)
+							o_file.rename(target)
+							if target.exists():
+								done += 1
+							else:
+								error += 1
+						else:
+							nochang += 1
+
 				except:
 					error += 1
-				else:
-					done += 1
-			outscr.out('complete', self.blue('Done {} Error {}'.format(done, error)))
+			outscr.out('complete', self.blue('Done {} NoChange {} Error {}'.format(done, nochang, error)))
 
 	def load_args(self):
 		for k, v in self.__Args.__dict__.items():

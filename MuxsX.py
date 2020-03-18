@@ -58,7 +58,7 @@ class outscr:
 	@staticmethod
 	def out(name, msg):
 		if name is not '' and msg is not '':
-			names = name.rjust(20)
+			names = name.rjust(25)
 			msgs = f' {msg}'
 			print(f'[{outscr.cyan(names)}]:{msgs}')
 

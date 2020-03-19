@@ -21,8 +21,8 @@ class vars(enum.Enum):
 	h_path = 'Specify the file path, which can be a folder or file name'
 	h_add = 'Add string to file name -a ddd or -a ddd@-5'
 	h_rex = 'Replace the string specified in the file name -r xxx:yyyy'
-	h_typ = 'Specify file type'
-	h_delx = 'Read the file to delete the list, then modify the file -dx ~/deldict'
+	h_typ = 'Specify file type -type mp4 or -type "mp4|jpg"'
+	h_delx = 'Read the file to delete the list, then modify the file -dx ~/deldict[file]'
 	h_print = 'Print file name exp -p'
 
 
@@ -122,8 +122,9 @@ class argsx:
 		elif FxPth.startswith('~/'):
 			FxPth = pathlib.PosixPath(FxPth).expanduser()
 		Path = pathlib.Path(FxPth)
-		exFex = type if type[0] == '*' else '*.{}'.format(type)
-		files = [x for x in Path.glob(exFex) if x.is_file()]
+		exFex = [f'.{x}' for x in type.split('|')]
+		outscr.out('debug type', exFex)
+		files = [x for x in Path.glob('*') if x.is_file() and x.suffix in exFex]
 		return files
 
 	def __any_file_name(self, files: list) -> dict:

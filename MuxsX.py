@@ -35,10 +35,10 @@ class colortable:
 	def Coloring(m: int = 0, f: int = 30, b: int = 40, s=None) -> str:
 		# \033[mode,f,bm
 		md = m if m in colortable.mode else 0
-		fc = f if f in colortable.fg or f is 0 else 30
-		bc = b if b in colortable.bg or b is 0 else 40
+		fc = f if f in colortable.fg or f == 0 else 30
+		bc = b if b in colortable.bg or b == 0 else 40
 		msg = str(s)
-		code = ';'.join([str(md), str(fc), str(bc)]) if bc is not 0 else ';'.join([str(md), str(fc)])
+		code = ';'.join([str(md), str(fc), str(bc)]) if bc != 0 else ';'.join([str(md), str(fc)])
 		return '\x1b[{c}m{t} \x1b[0m'.format(c=code, t=msg)
 
 	@staticmethod
@@ -56,7 +56,7 @@ class colortable:
 class outscr:
 	@staticmethod
 	def out(name, msg):
-		if name is not '' and msg is not '':
+		if name != '' and msg != '':
 			names = name.center(25)
 			msgs = f'{msg}'
 			print(f'[{outscr.cyan(names)}] {msgs}')
@@ -123,12 +123,11 @@ class argsx:
 			FxPth = pathlib.PosixPath(FxPth).expanduser()
 		Path = pathlib.Path(FxPth)
 		exFex = [f'.{x}' for x in type.split('|')]
-		outscr.out('debug type', exFex)
 		files = [x for x in Path.glob('*') if x.is_file() and x.suffix in exFex]
 		return files
 
 	def __any_file_name(self, files: list) -> dict:
-		if len(files) is 0:
+		if len(files) == 0:
 			return {}
 		else:
 			rfs, inx = {}, 0

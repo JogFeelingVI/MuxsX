@@ -2,7 +2,7 @@
 # @Date: 2021-08-18 15:12:58 
 # @Last Modified by:   By JogFeelingVi 
 # @Last Modified time: 2021-08-18 15:12:58
-import pathlib as __plib, os as __os
+import pathlib as __plib
 
 def pathx(p:str = '~/Downloads'):
     flg = p[0]

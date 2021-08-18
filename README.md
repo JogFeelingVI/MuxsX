@@ -7,3 +7,10 @@
  · 건물, 계속 지켜봐주십시오.
  · 建物は、ご期待ください
 
+#### Install
+ 
+```
+↪ sudo ln -s ~/Downloads/GitHub/MuxsX/muxsx.command /usr/local/bin/muxsx
+```
+- macos linux
+

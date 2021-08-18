@@ -13,5 +13,6 @@ class call:
         for k, v in args.items():
             if v is not None:
                 self.__Fix_args[k] = v
+            if k == 'path':
+                self.__Fix_args[k] = osp.pathx(v)
         print(self.__Fix_args)
-        print(osp.pathx(self.__Fix_args['path']))

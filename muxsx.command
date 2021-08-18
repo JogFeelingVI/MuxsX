@@ -8,7 +8,7 @@ import argparse
 from modex.helps import strings
 from modex.core import call
 
-command = argparse.ArgumentParser(prog='muxsx.command')
+command = argparse.ArgumentParser(prog='muxsx')
 command.add_argument('-d', dest='del', metavar='delete', help=strings.dels.value, type=str)
 command.add_argument('-a', dest='add', metavar='add', help=strings.addto.value, type=str)
 command.add_argument('-r', dest='rep', metavar='Replace', help=strings.reps.value, type=str)

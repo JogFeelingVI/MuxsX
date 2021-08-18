@@ -17,17 +17,17 @@
  usage: muxsx [-h] [-d delete] [-a add] [-r Replace] [-type type] [-dx delete from file] [-p path]
 
  optional arguments:
-  -h, --help            show this help message and exit
-  -d delete             Delete specified characters，Ex -d xxx or -d xxx,yyy,zzz
-  -a add                 Add string to file name -a ddd or -a ddd@-5
-  -r Replace           Replace the string specified in the file name -r xxx:yyyy
-  -type type           Specify file type -type mp4 or -type "mp4|jpg"
-  -dx delete from file  Read the file to delete the list, then modify the file -dx ~/deldict[file]
-  -p path               Specify the file path, which can be a folder or file name
+- -h, --help            show this help message and exit
+- -d delete             Delete specified characters，Ex -d xxx or -d xxx,yyy,zzz
+- -a add                 Add string to file name -a ddd or -a ddd@-5
+- -r Replace           Replace the string specified in the file name -r xxx:yyyy
+- -type type           Specify file type -type mp4 or -type "mp4|jpg"
+- -dx delete from file  Read the file to delete the list, then modify the file -dx ~/deldict[file]
+- -p path               Specify the file path, which can be a folder or file name
 
 #### Examples
 ```
--dx Examples
+muxsx -p ~/Downloads -type mkv -dx Examples
 ```
 ###### Examples: This is a file, the project has `Examples` file, one word per line, no comment support
 

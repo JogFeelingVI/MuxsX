@@ -6,6 +6,7 @@
 
 import argparse
 from modex.helps import strings
+from modex.core import call
 
 command = argparse.ArgumentParser(prog='muxsx.command')
 command.add_argument('-d', dest='del', metavar='delete', help=strings.dels.value, type=str)
@@ -18,6 +19,7 @@ args = command.parse_args()
 
 def main():
     print(f'commamd\r{args}')
+    anycall = call(args=args.__dict__)
 
 if __name__ == '__main__':
     main()

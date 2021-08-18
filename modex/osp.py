@@ -3,6 +3,7 @@
 # @Last Modified by:   By JogFeelingVi 
 # @Last Modified time: 2021-08-18 15:12:58
 import pathlib as __plib
+from typing import Union
 
 def pathx(p:str = '~/Downloads'):
     flg = p[0]
@@ -13,3 +14,11 @@ def pathx(p:str = '~/Downloads'):
     }
     path = fixs[flg](p)
     return path if path.exists() else None
+
+def find(p:__plib.PosixPath = None):
+    if p is None:
+        print('PosixPath is Not None')
+        return None
+    files = [x for x in p.glob('*') if x.is_file() and x.name[0] not in ['.']]
+    for fx in files:
+        print(fx.name)

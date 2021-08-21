@@ -12,4 +12,4 @@ class strings(__EN):
     reps = 'Replace the string specified in the file name -r xxx:yyyy'
     types = 'Specify file type -type mp4 or -type "mp4,jpg"'
     delxs = 'Read the file to delete the list, then modify the file -dx ~/deldict[file]'
-    lists = 'Print file name exp -p'
+    shows = 'show file list exp -s'

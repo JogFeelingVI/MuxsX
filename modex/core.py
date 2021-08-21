@@ -5,6 +5,7 @@
 import enum
 from os import path
 from typing import List
+from warnings import simplefilter
 from . import osp
 
 
@@ -12,15 +13,15 @@ class call:
     __Fix_args = {'var': 1.02}
     __files = None
     __fix = {
-            'path': lambda k, v: call.__fix_path(k, v),
-            'type': lambda k, v: call.__fix_type(k, v),
-            'OxOO': lambda k, v: call.__fix_ohes(k, v),
-        }
+        'path': lambda k, v: call.__fix_path(k, v),
+        'type': lambda k, v: call.__fix_type(k, v),
+        'OxOO': lambda k, v: call.__fix_ohes(k, v),
+    }
     __act = {
         'add': lambda f: call.__act_add(f),
         'rep': lambda f: call.__act_rep(f),
         'del': lambda f: call.__act_del(f),
-        'delete_x': lambda f: print('act delete_x'),
+        'dxxx': lambda f: call.__act_delete(f),
     }
 
     @classmethod
@@ -35,6 +36,8 @@ class call:
     def __fix_type(cls, key, VALE):
         if ',' in VALE:
             cls.__Fix_args[key] = [f'.{x}' for x in VALE.split(',')]
+        elif 'f' == VALE:
+            cls.__Fix_args[key] = '0xF'
         else:
             cls.__Fix_args[key] = [f'.{VALE}']
 
@@ -48,7 +51,10 @@ class call:
             return
         for k, v in args.items():
             if v is not None:
-                self.__fix[k](k, v) if k in self.__fix.keys() else self.__fix['OxOO'](k, v)
+                if k in self.__fix.keys():
+                    self.__fix[k](k, v)
+                else:
+                    self.__fix['OxOO'](k, v)
         print(f'debug {self.__Fix_args}')
         self.__files = self.__find()
 
@@ -61,70 +67,142 @@ class call:
             return
         if 'type' not in cls.__Fix_args.keys():
             print('Warning: No type was developed')
-            cls.files = [ospif(x) for x in tmp]
+            tmp = [ospif(x) for x in tmp]
         else:
             sufx = cls.__Fix_args['type']
-            tmp = [ospif(x) for x in tmp if ospif(x).file.suffix in sufx]
+            if sufx == '0xF':
+                tmp = [ospif(x) for x in tmp]
+            else:
+                tmp = [ospif(x) for x in tmp if ospif(x).file.suffix in sufx]
         flen = tmp.__len__()
         print(f'Find: {flen} files found')
         return tmp
 
+    @staticmethod
+    def __r4():
+        from random import randint as rint
+        Lc = list('aBc0efg2ijk3mNo7Qrs9uvWyz1')
+        groud = [(int(x * 6.5), int(x * 6.5 + 6.5)) for x in [0, 1, 2, 3]]
+        str4 = [Lc[rint(x[0], x[1] - 1)] for x in groud]
+        return '-{}{}{}{}'.format(*str4)
+
     @classmethod
-    def __act_show(cls, files:List[osp.ifile]):
+    def __act_show(cls, files: List[osp.ifile]):
         if files is None:
             print('Warning: File list is empty')
             return
         for i, ifs in enumerate(files):
             print(f'  {i}: {ifs.file.name}')
-        
 
     @classmethod
-    def __act_add(cls, files:List[osp.ifile]):
+    def __act_add(cls, files: List[osp.ifile]):
         if files is None:
             print('Warning: File list is empty')
             return
         comar = cls.__Fix_args['add'].split('@')
-        comar = [[comar[-1], 0], comar][len(comar) == 2]
-        if comar[-1].isdigit():
-            print(f'Error @{comar[-1]} Parameter error, Exp xxx@2:int')
-            return
+        sx, ix = [[comar[-1], 0], comar][len(comar) == 2]
+        ix = [ix, int(ix)][type(ix) is str]
         for i, ifs in enumerate(files):
-            sx, ix = comar
-            name = list(ifs.file.name.split('.')[0])
-            name.insert(int(ix), sx)
-            n2 = f'{"".join(name)}{ifs.file.suffix}'
-            np = osp.plib.Path(ifs.file.parent, n2)
-            print(f'  {i}: {ifs.file.name} > {n2}')
-            ifs.file.rename(np)
-    
-    @classmethod
-    def __act_del(cls, files:List[osp.ifile]):
-        if files is None:
-            print('Warning: File list is empty')
-            return
-        comar = cls.__Fix_args['del'].split(',')
-        for i, ifs in enumerate(files):
-            for c in comar:
-                n2 = ifs.file.name.split('.')[0].replace(c, '')
-            n2 = f'{"".join(n2)}{ifs.file.suffix}'
-            np = osp.plib.Path(ifs.file.parent, n2)
-            print(f'  {i}: {ifs.file.name} > {n2}')
-            ifs.file.rename(np)
-            
+            sufx = ifs.file.suffix
+            n1 = ifs.file.name.replace(sufx, '')
+            nx = list(n1)
+            nx.insert(ix, sx)
+            n2 = f'{"".join(nx)}{sufx}'
+            n2p = osp.plib.Path(ifs.file.parent, n2)
+            if n2p.exists() == True:
+                n4 = f'{"".join(nx)}{cls.__r4()}{sufx}'
+                n4p = osp.plib.Path(ifs.file.parent, n4)
+                print(f'  {i}: {ifs.file.name} > {n4}')
+                ifs.file.rename(n4p)
+            else:
+                print(f'  {i}: {ifs.file.name} > {n2}')
+                ifs.file.rename(n2p)
 
     @classmethod
-    def __act_rep(cls, files:List[osp.ifile]):
+    def __act_del(cls, files: List[osp.ifile]):
         if files is None:
             print('Warning: File list is empty')
             return
         comar = cls.__Fix_args['del'].split(',')
-        print(comar)
+        for i, ifs in enumerate(files):
+            sufx = ifs.file.suffix
+            n1 = ifs.file.name.replace(sufx, '')
+            nx = n1
+            for c in comar:
+                nx = nx.replace(c, '')
+            if n1 != nx:
+                n2 = f'{"".join(nx)}{sufx}'
+                n2p = osp.plib.Path(ifs.file.parent, n2)
+                if n2p.exists() == True:
+                    n4 = f'{"".join(nx)}{cls.__r4()}{sufx}'
+                    n4p = osp.plib.Path(ifs.file.parent, n4)
+                    print(f'  {i}: {ifs.file.name} > {n4}')
+                    ifs.file.rename(n4p)
+                else:
+                    print(f'  {i}: {ifs.file.name} > {n2}')
+                    ifs.file.rename(n2p)
+
+    @classmethod
+    def __act_rep(cls, files: List[osp.ifile]):
+        if files is None:
+            print('Warning: File list is empty')
+            return
+        comar = cls.__Fix_args['rep'].split(':')
+        if len(comar) > 2:
+            print(f'Error -r xxx:yyy Parameter error')
+            return
+        for i, ifs in enumerate(files):
+            o, n = comar
+            sufx = ifs.file.suffix
+            n1 = ifs.file.name.replace(sufx, '')
+            nx = n1.replace(o, n)
+            if n1 != nx:
+                n2 = f'{"".join(nx)}{sufx}'
+                n2p = osp.plib.Path(ifs.file.parent, n2)
+                if n2p.exists() == True:
+                    n4 = f'{"".join(nx)}{cls.__r4()}{sufx}'
+                    n4p = osp.plib.Path(ifs.file.parent, n4)
+                    print(f'  {i}: {ifs.file.name} > {n4}')
+                    ifs.file.rename(n4p)
+                else:
+                    print(f'  {i}: {ifs.file.name} > {n2}')
+                    ifs.file.rename(n2p)
+
+    @classmethod
+    def __act_delete(cls, files: List[osp.ifile]):
+        if files is None:
+            print('Warning: File list is empty')
+            return
+        dxpath = osp.plib.PosixPath(cls.__Fix_args['dxxx'])
+        if dxpath.exists() == False:
+            print(f'Error: {dxpath} Path does not exist')
+        else:
+            with open(dxpath, 'r') as reads:
+                lines = reads.read().split('\n')
+                for i, ifs in enumerate(files):
+                    sufx = ifs.file.suffix
+                    n1 = ifs.file.name.replace(sufx, '')
+                    nx = n1
+                    for L in lines:
+                        nx = nx.replace(L, '')
+                    if nx != n1:
+                        n2 = f'{"".join(nx)}{sufx}'
+                        n2p = osp.plib.Path(ifs.file.parent, n2)
+                        if n2p.exists() == True:
+                            n4 = f'{"".join(nx)}{cls.__r4()}{sufx}'
+                            n4p = osp.plib.Path(ifs.file.parent, n4)
+                            print(f'  {i}: {ifs.file.name} > {n4}')
+                            ifs.file.rename(n4p)
+                        else:
+                            print(f'  {i}: {ifs.file.name} > {n2}')
+                            ifs.file.rename(n2p)
+
 
     def action(self):
         if self.__files is None:
             print('Warning: No documents were found')
             return
-        actkeys = 'add,del,rep,delete_x'
+        actkeys = 'add,del,rep,dxxx'
         for key in actkeys.split(','):
             if key in self.__Fix_args.keys():
                 self.__act[key](self.__files)

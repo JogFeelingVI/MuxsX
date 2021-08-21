@@ -14,7 +14,7 @@ command.add_argument('-d', dest='del', metavar='delete', help=strings.dels.value
 command.add_argument('-a', dest='add', metavar='add', help=strings.addto.value, type=str)
 command.add_argument('-r', dest='rep', metavar='Replace', help=strings.reps.value, type=str)
 command.add_argument('-type', dest='type', metavar='type', help=strings.types.value, type=str)
-command.add_argument('-dx', dest='delete_x', metavar='delete from file', help=strings.delxs.value, type=str)
+command.add_argument('-dx', dest='dxxx', metavar='delete from file', help=strings.delxs.value, type=str)
 command.add_argument('-s', dest='show', default=False, action='store_true', help=strings.shows.value)
 args = command.parse_args()
 

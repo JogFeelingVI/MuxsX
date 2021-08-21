@@ -79,12 +79,17 @@ class call:
         return tmp
 
     @staticmethod
-    def __r4():
+    def __r4(bit: int = 4):
+        bit = [4, bit][7 >= bit >= 3]
         from random import randint as rint
+        bits = '{}' * bit
+        fxst = f'-{bits}'
+        spflag = 26 / bit
         Lc = list('aBc0efg2ijk3mNo7Qrs9uvWyz1')
-        groud = [(int(x * 6.5), int(x * 6.5 + 6.5)) for x in [0, 1, 2, 3]]
+        groud = [(int(x * spflag), int(x * spflag + spflag))
+                 for x in range(bit)]
         str4 = [Lc[rint(x[0], x[1] - 1)] for x in groud]
-        return '-{}{}{}{}'.format(*str4)
+        return fxst.format(*str4)
 
     @classmethod
     def __act_show(cls, files: List[osp.ifile]):
@@ -196,7 +201,6 @@ class call:
                         else:
                             print(f'  {i}: {ifs.file.name} > {n2}')
                             ifs.file.rename(n2p)
-
 
     def action(self):
         if self.__files is None:

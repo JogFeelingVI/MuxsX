@@ -13,3 +13,4 @@ class strings(__EN):
     types = 'Specify file type -type mp4 or -type "mp4,jpg"'
     delxs = 'Read the file to delete the list, then modify the file -dx ~/deldict[file]'
     shows = 'show file list exp -s'
+    desct = 'Multi-file renaming by jogfeelingvi'

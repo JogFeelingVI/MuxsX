@@ -5,7 +5,6 @@
 import enum
 from os import path
 from typing import List
-from warnings import simplefilter
 from . import osp
 
 

@@ -2,7 +2,7 @@
 # @Date: 2021-08-18 14:22:38
 # @Last Modified by:   By JogFeelingVi
 # @Last Modified time: 2021-08-18 14:22:38
-import enum
+import enum, re
 from os import path
 from pathlib import PosixPath
 from typing import List, Union
@@ -107,10 +107,7 @@ class call:
         if (tmp := osp.find(_p)) is None:
             cls.pinfo('Error', f'{_p} There is no documentation')
             return
-        elif tmp.is_file() == True:
-            cls.pinfo('Find', '1 files found')
-            return [ospif(tmp)]
-        elif tmp.is_dir() == True:
+        elif type(tmp) == list:
             if 'type' not in cls.__Fix_args.keys():
                 cls.pinfo('Warning', 'The -type parameter is not used')
                 tmp = [ospif(x) for x in tmp]
@@ -120,6 +117,11 @@ class call:
                     tmp = [ospif(x) for x in tmp]
                 else:
                     tmp = [ospif(x) for x in tmp if ospif(x).file.suffix in sufx]
+            
+            if 'regx' in cls.__Fix_args.keys():
+                regx = cls.__Fix_args['regx']
+                regxs = lambda Sx: re.search(regx, Sx)
+                tmp = [x for x in tmp if regxs(x.file.name) != None]
             flen = tmp.__len__()
             cls.pinfo('Find', f'{flen} files found')
             return tmp
@@ -248,6 +250,10 @@ class call:
                         else:
                             cls.pfile_L(i, ifs.file.name, n2)
                             ifs.file.rename(n2p)
+    
+    @classmethod
+    def __act_regx(cls, files: List[osp.ifile]):
+        pass
 
     def action(self):
         if self.__files is None:

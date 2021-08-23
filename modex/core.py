@@ -4,6 +4,7 @@
 # @Last Modified time: 2021-08-18 14:22:38
 import enum
 from os import path
+from pathlib import PosixPath
 from typing import List, Union
 from . import osp
 
@@ -106,18 +107,22 @@ class call:
         if (tmp := osp.find(_p)) is None:
             cls.pinfo('Error', f'{_p} There is no documentation')
             return
-        if 'type' not in cls.__Fix_args.keys():
-            cls.pinfo('Warning', 'The -type parameter is not used')
-            tmp = [ospif(x) for x in tmp]
-        else:
-            sufx = cls.__Fix_args['type']
-            if sufx == '0xF':
+        elif tmp.is_file() == True:
+            cls.pinfo('Find', '1 files found')
+            return [ospif(tmp)]
+        elif tmp.is_dir() == True:
+            if 'type' not in cls.__Fix_args.keys():
+                cls.pinfo('Warning', 'The -type parameter is not used')
                 tmp = [ospif(x) for x in tmp]
             else:
-                tmp = [ospif(x) for x in tmp if ospif(x).file.suffix in sufx]
-        flen = tmp.__len__()
-        cls.pinfo('Find', f'{flen} files found')
-        return tmp
+                sufx = cls.__Fix_args['type']
+                if sufx == '0xF':
+                    tmp = [ospif(x) for x in tmp]
+                else:
+                    tmp = [ospif(x) for x in tmp if ospif(x).file.suffix in sufx]
+            flen = tmp.__len__()
+            cls.pinfo('Find', f'{flen} files found')
+            return tmp
 
     @staticmethod
     def __r4(bit: int = 4):
@@ -137,8 +142,9 @@ class call:
         if files is None:
             cls.pinfo('Warning', 'File list is empty')
             return
-        for i, ifs in enumerate(files):
-            cls.pfile_L(i, ifs.file.name)
+        elif type(files) is list:
+            for i, ifs in enumerate(files):
+                cls.pfile_L(i, ifs.file.name)
 
     @classmethod
     def __act_add(cls, files: List[osp.ifile]):

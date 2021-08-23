@@ -14,3 +14,4 @@ class strings(__EN):
     delxs = 'Read the file to delete the list, then modify the file -dx ~/deldict[file]'
     shows = 'show file list exp -s'
     desct = 'Multi-file renaming by jogfeelingvi'
+    regx = 'Regular expressions filtering files'

@@ -42,7 +42,7 @@ class call:
         'add': lambda f: call.__act_add(f),
         'rep': lambda f: call.__act_rep(f),
         'del': lambda f: call.__act_del(f),
-        'dxxx': lambda f: call.__act_delete(f),
+        'dfx': lambda f: call.__act_delete(f),
     }
 
     @staticmethod
@@ -227,7 +227,7 @@ class call:
         if files is None:
             cls.pinfo('Warning', 'File list is empty')
             return
-        dxpath = osp.plib.PosixPath(cls.__Fix_args['dxxx'])
+        dxpath = osp.plib.PosixPath(cls.__Fix_args['dfx'])
         if dxpath.exists() == False:
             cls.pinfo('Error', '{dxpath} Path does not exist')
         else:
@@ -258,7 +258,7 @@ class call:
     def action(self):
         if self.__files is None:
             return
-        actkeys = 'add,del,rep,dxxx'
+        actkeys = 'add,del,rep,dfx'
         for key in actkeys.split(','):
             if key in self.__Fix_args.keys():
                 self.__act[key](self.__files)

@@ -34,7 +34,7 @@ command.add_argument('-type',
                      help=strings.types.value,
                      type=str)
 command.add_argument('-dx',
-                     dest='dxxx',
+                     dest='dfx',
                      metavar='DeleteFile',
                      help=strings.delxs.value,
                      type=str)

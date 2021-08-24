@@ -11,32 +11,31 @@ from modex.core import call
 command = argparse.ArgumentParser(prog='muxsx',
                                   description=strings.desct.value)
 command.add_argument('path',
-                     metavar='path',
                      help=strings.paths.value,
                      default='~/Downloads')
 command.add_argument('-d',
                      dest='del',
-                     metavar='delete',
+                     metavar='delelt',
                      help=strings.dels.value,
                      type=str)
 command.add_argument('-a',
                      dest='add',
-                     metavar='Add to file name',
+                     metavar='add',
                      help=strings.addto.value,
                      type=str)
 command.add_argument('-r',
                      dest='rep',
-                     metavar='Replace',
+                     metavar='replace',
                      help=strings.reps.value,
                      type=str)
 command.add_argument('-type',
                      dest='type',
-                     metavar='type',
+                     metavar='Type',
                      help=strings.types.value,
                      type=str)
 command.add_argument('-dx',
                      dest='dxxx',
-                     metavar='delete from file',
+                     metavar='DeleteFile',
                      help=strings.delxs.value,
                      type=str)
 command.add_argument('-s',
@@ -44,10 +43,10 @@ command.add_argument('-s',
                      default=False,
                      action='store_true',
                      help=strings.shows.value)
-command.add_argument('-regx',
-                     dest='regx',
-                     metavar='Regular',
-                     help=strings.regx.value,
+command.add_argument('-F',
+                     dest='filter',
+                     metavar='Filter',
+                     help=strings.filter.value,
                      type=str)
 args = command.parse_args()
 

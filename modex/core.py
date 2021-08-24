@@ -118,8 +118,8 @@ class call:
                 else:
                     tmp = [ospif(x) for x in tmp if ospif(x).file.suffix in sufx]
             
-            if 'regx' in cls.__Fix_args.keys():
-                regx = cls.__Fix_args['regx']
+            if 'filter' in cls.__Fix_args.keys():
+                regx = cls.__Fix_args['filter']
                 regxs = lambda Sx: re.search(regx, Sx)
                 tmp = [x for x in tmp if regxs(x.file.name) != None]
             flen = tmp.__len__()

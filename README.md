@@ -18,7 +18,7 @@
 
 
  optional arguments:
-  | 参数 | 说明 |
+  | 参数/Parameters | 说明/Description |
   | :-----| :------|
   |*positional arguments*||
   |**path** |Specify the file path, which can be a folder or file name |

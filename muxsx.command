@@ -10,9 +10,12 @@ from modex.core import call
 
 command = argparse.ArgumentParser(prog='muxsx',
                                   description=strings.desct.value)
-command.add_argument('path',
-                     help=strings.paths.value,
-                     default='~/Downloads')
+command.add_argument('path', help=strings.paths.value, default='~/Downloads')
+command.add_argument('--sn',
+                     dest='sn',
+                     help='serial number',
+                     action='store_const',
+                     const=2)
 command.add_argument('-d',
                      dest='del',
                      metavar='delelt',
@@ -28,12 +31,12 @@ command.add_argument('-r',
                      metavar='replace',
                      help=strings.reps.value,
                      type=str)
-command.add_argument('-type',
+command.add_argument('-t',
                      dest='type',
                      metavar='Type',
                      help=strings.types.value,
                      type=str)
-command.add_argument('-dx',
+command.add_argument('--dx',
                      dest='dfx',
                      metavar='DeleteFile',
                      help=strings.delxs.value,

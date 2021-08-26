@@ -43,16 +43,17 @@ class call:
         'rep': lambda f: call.__act_rep(f),
         'del': lambda f: call.__act_del(f),
         'dfx': lambda f: call.__act_delete(f),
+        'sn': lambda f: call.__act_sn(f)
     }
 
     @staticmethod
-    def pinfo(title:str, info:str):
+    def pinfo(title: str, info: str):
         T = yello(title)
         I = blue(info)
         print(f'{T}: {I}')
-    
+
     @staticmethod
-    def pfile_L(id,n1,n2=None):
+    def pfile_L(id, n1, n2=None):
         '''
         The -type parameter is not used
         '''
@@ -87,7 +88,8 @@ class call:
 
     def __init__(self, args: dict = None):
         if (AT := type(args)) != dict:
-            self.pinfo('Error', f'Parameters must be of type dict, args-T is {AT}')
+            self.pinfo('Error',
+                       f'Parameters must be of type dict, args-T is {AT}')
             return
         for k, v in args.items():
             if v is not None:
@@ -116,8 +118,10 @@ class call:
                 if sufx == '0xF':
                     tmp = [ospif(x) for x in tmp]
                 else:
-                    tmp = [ospif(x) for x in tmp if ospif(x).file.suffix in sufx]
-            
+                    tmp = [
+                        ospif(x) for x in tmp if ospif(x).file.suffix in sufx
+                    ]
+
             if 'filter' in cls.__Fix_args.keys():
                 regx = cls.__Fix_args['filter']
                 regxs = lambda Sx: re.search(regx, Sx)
@@ -145,6 +149,9 @@ class call:
             cls.pinfo('Warning', 'File list is empty')
             return
         elif type(files) is list:
+            for key in cls.__act.keys():
+                if key in cls.__Fix_args.keys():
+                    return
             for i, ifs in enumerate(files):
                 cls.pfile_L(i, ifs.file.name)
 
@@ -250,15 +257,29 @@ class call:
                         else:
                             cls.pfile_L(i, ifs.file.name, n2)
                             ifs.file.rename(n2p)
-    
+
     @classmethod
-    def __act_regx(cls, files: List[osp.ifile]):
-        pass
+    def __act_sn(cls, files: List[osp.ifile]):
+        if files is None:
+            cls.pinfo('Warning', 'File list is empty')
+            return
+        else:
+            fileslen = f'{len(files)}'.__len__()
+            fls = fileslen if fileslen >= 2 else 2
+            fmz = f'{{s:0{fls}}}'
+            for i, ifs in enumerate(files):
+                sufx = ifs.file.suffix
+                n1 = ifs.file.name.replace(sufx, '')
+                nx = f'{fmz.format(s=i)}.{n1}{sufx}'
+                if nx != n1:
+                    n1p = osp.plib.Path(ifs.file.parent, nx)
+                    cls.pfile_L(i, ifs.file.name, nx)
+                    ifs.file.rename(n1p)
 
     def action(self):
         if self.__files is None:
             return
-        actkeys = 'add,del,rep,dfx'
+        actkeys = 'add,del,rep,dfx,sn'
         for key in actkeys.split(','):
             if key in self.__Fix_args.keys():
                 self.__act[key](self.__files)

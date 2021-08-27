@@ -144,6 +144,10 @@ class call:
         return fxst.format(*str4)
 
     @classmethod
+    def __act_save(cls):
+        return cls.__Fix_args['save']
+
+    @classmethod
     def __act_show(cls, files: List[osp.ifile]):
         if files is None:
             cls.pinfo('Warning', 'File list is empty')
@@ -174,10 +178,12 @@ class call:
                 n4 = f'{"".join(nx)}{cls.__r4()}{sufx}'
                 n4p = osp.plib.Path(ifs.file.parent, n4)
                 cls.pfile_L(i, ifs.file.name, n4)
-                ifs.file.rename(n4p)
+                if cls.__act_save():
+                    ifs.file.rename(n4p)
             else:
                 cls.pfile_L(i, ifs.file.name, n2)
-                ifs.file.rename(n2p)
+                if cls.__act_save():
+                    ifs.file.rename(n2p)
 
     @classmethod
     def __act_del(cls, files: List[osp.ifile]):
@@ -198,10 +204,12 @@ class call:
                     n4 = f'{"".join(nx)}{cls.__r4()}{sufx}'
                     n4p = osp.plib.Path(ifs.file.parent, n4)
                     cls.pfile_L(i, ifs.file.name, n4)
-                    ifs.file.rename(n4p)
+                    if cls.__act_save():
+                        ifs.file.rename(n4p)
                 else:
                     cls.pfile_L(i, ifs.file.name, n2)
-                    ifs.file.rename(n2p)
+                    if cls.__act_save():
+                        ifs.file.rename(n2p)
 
     @classmethod
     def __act_rep(cls, files: List[osp.ifile]):
@@ -224,10 +232,12 @@ class call:
                     n4 = f'{"".join(nx)}{cls.__r4()}{sufx}'
                     n4p = osp.plib.Path(ifs.file.parent, n4)
                     cls.pfile_L(i, ifs.file.name, n4)
-                    ifs.file.rename(n4p)
+                    if cls.__act_save():
+                        ifs.file.rename(n4p)
                 else:
                     cls.pfile_L(i, ifs.file.name, n2)
-                    ifs.file.rename(n2p)
+                    if cls.__act_save():
+                        ifs.file.rename(n2p)
 
     @classmethod
     def __act_delete(cls, files: List[osp.ifile]):
@@ -253,10 +263,12 @@ class call:
                             n4 = f'{"".join(nx)}{cls.__r4()}{sufx}'
                             n4p = osp.plib.Path(ifs.file.parent, n4)
                             cls.pfile_L(i, ifs.file.name, n4)
-                            ifs.file.rename(n4p)
+                            if cls.__act_save():
+                                ifs.file.rename(n4p)
                         else:
                             cls.pfile_L(i, ifs.file.name, n2)
-                            ifs.file.rename(n2p)
+                            if cls.__act_save():
+                                ifs.file.rename(n2p)
 
     @classmethod
     def __act_sn(cls, files: List[osp.ifile]):
@@ -270,11 +282,17 @@ class call:
             for i, ifs in enumerate(files):
                 sufx = ifs.file.suffix
                 n1 = ifs.file.name.replace(sufx, '')
-                nx = f'{fmz.format(s=i)}.{n1}{sufx}'
-                if nx != n1:
-                    n1p = osp.plib.Path(ifs.file.parent, nx)
-                    cls.pfile_L(i, ifs.file.name, nx)
-                    ifs.file.rename(n1p)
+                match = re.match('[\d]{2,}[.]', n1)
+                pa, pb = match.span()
+                if pa == 0 and pb >= 3:
+                    cls.pfile_L(i, ifs.file.name, n1)
+                else:
+                    nx = f'{fmz.format(s=i)}.{n1}{sufx}'
+                    if nx != n1:
+                        n1p = osp.plib.Path(ifs.file.parent, nx)
+                        cls.pfile_L(i, ifs.file.name, nx)
+                        if cls.__act_save():
+                            ifs.file.rename(n1p)
 
     def action(self):
         if self.__files is None:

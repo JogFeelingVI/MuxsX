@@ -51,6 +51,7 @@ command.add_argument('-F',
                      metavar='Filter',
                      help=strings.filter.value,
                      type=str)
+command.add_argument('--save', default=False, action='store_true')
 args = command.parse_args()
 
 

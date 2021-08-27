@@ -79,6 +79,8 @@ class call:
             cls.__Fix_args[key] = [f'.{x}' for x in VALE.split(',')]
         elif 'f' == VALE:
             cls.__Fix_args[key] = '0xF'
+        elif 'd' == VALE:
+            cls.__Fix_args[key] = '0xD'
         else:
             cls.__Fix_args[key] = [f'.{VALE}']
 
@@ -115,12 +117,15 @@ class call:
                 tmp = [ospif(x) for x in tmp]
             else:
                 sufx = cls.__Fix_args['type']
-                if sufx == '0xF':
-                    tmp = [ospif(x) for x in tmp]
+                typed = {
+                    '0xF': lambda t: [ospif(x) for x in t if ospif(x).file.is_file()],
+                    '0xD': lambda t: [ospif(x) for x in t if ospif(x).file.is_dir()],
+                    'OxC': lambda t: [ospif(x) for x in t if ospif(x).file.suffix in sufx]
+                }
+                if sufx in typed.keys():
+                    tmp = typed[sufx](tmp)
                 else:
-                    tmp = [
-                        ospif(x) for x in tmp if ospif(x).file.suffix in sufx
-                    ]
+                    tmp = typed['0xC'](tmp)
 
             if 'filter' in cls.__Fix_args.keys():
                 regx = cls.__Fix_args['filter']
@@ -186,7 +191,8 @@ class call:
             return
         else:
             o, n = comar
-            tmp = file.name.replace(o, n)
+            tmp = file.name
+            tmp = re.sub(o, n, tmp, 0)
             return tmp
 
     @classmethod
@@ -214,6 +220,15 @@ class call:
         else:
             tmp = f'{fmz.format(s=index)}-{tmp}'
             return tmp
+    
+    @classmethod
+    def __act_r4(cls, oName:str):
+        if 'ucode' in cls.__Fix_args.keys():
+            r4 = cls.__Fix_args['ucode']
+            tmp = f'{oName}{cls.__r4(r4)}'
+            return tmp
+        else:
+            return oName
 
     def action(self):
         if self.__files is None:
@@ -228,16 +243,18 @@ class call:
                     else:
                         n_Name = self.__act[key](i, ifs)
                     # del fast string .
-                    if n_Name[0] in list(' .,'):
+                    if n_Name[0] in list(' .,') and len(n_Name) >= 2:
                         n_Name = n_Name[1:]
                     # add r4 shibiema
-                    if (nPath := ifs.nPath(n_Name)) == None:
-                        n_Name = f'{n_Name}{self.__r4()}'
+                    n_Name = self.__act_r4(n_Name)
+                    if o_Name != n_Name:
                         nPath = ifs.nPath(n_Name)
                     # show diff file name
-                    self.pfile_L(i, o_Name, n_Name)
-                    if self.__act_save():
-                        ifs.file.rename(nPath)
+                        self.pfile_L(i, o_Name, n_Name)
+                        if self.__act_save():
+                            ifs.file.rename(nPath)
+                    else:
+                        self.pfile_L(i, o_Name)
                 #self.__act[key](self.__files)
         if self.__Fix_args['show'] == True:
             self.__act_show(self.__files)

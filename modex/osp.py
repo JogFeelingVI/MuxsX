@@ -23,7 +23,8 @@ def find(p: plib.PosixPath = None):
     if p.is_file() == True:
         files = [p]
     elif p.is_dir():
-        files = [x for x in p.glob('*') if x.is_file() and x.name[0] not in ['.']] # and x.name[0] not in ['.']
+        files = [x for x in p.glob('*') ] # and x.name[0] not in ['.']
+        #if x.is_file() and x.name[0] not in ['.']
     return files
 
 

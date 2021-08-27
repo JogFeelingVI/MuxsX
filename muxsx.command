@@ -51,6 +51,12 @@ command.add_argument('-F',
                      metavar='Filter',
                      help=strings.filter.value,
                      type=str)
+command.add_argument('-C',
+                     dest='ucode',
+                     metavar='UniqueCode',
+                     type=int,
+                     choices=[3, 4, 5, 6, 7],
+                     help='-C4 add r4 code -aB4i')
 command.add_argument('--save', default=False, action='store_true')
 args = command.parse_args()
 

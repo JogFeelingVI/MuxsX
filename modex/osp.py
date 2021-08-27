@@ -29,15 +29,24 @@ def find(p: plib.PosixPath = None):
 
 class ifile:
     file = None
+    sufx = None
+    name = None
     newname = None
 
     def __init__(self, path: str) -> None:
         self.file = plib.PosixPath(path)
+        self.sufx = self.file.suffix
+        self.name = self.file.name.replace(self.sufx, '')
 
-    def new(self, name:str):
+    def nPath(self, nName:str):
         '''
-        file new name
+        file new name 
+            n2p = osp.plib.Path(ifs.file.parent, n2)
         '''
-        self.newname = name
+        nPx = plib.Path(self.file.parent, f'{nName}{self.sufx}')
+        if nPx.exists() == False:
+            return nPx
+        else:
+            return None
 
     

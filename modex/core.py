@@ -78,9 +78,9 @@ class call:
         if ',' in VALE:
             cls.__Fix_args[key] = [f'.{x}' for x in VALE.split(',')]
         elif 'f' == VALE:
-            cls.__Fix_args[key] = '0xF'
+            cls.__Fix_args[key] = ['0xF']
         elif 'd' == VALE:
-            cls.__Fix_args[key] = '0xD'
+            cls.__Fix_args[key] = ['0xD']
         else:
             cls.__Fix_args[key] = [f'.{VALE}']
 
@@ -120,10 +120,10 @@ class call:
                 typed = {
                     '0xF': lambda t: [ospif(x) for x in t if ospif(x).file.is_file()],
                     '0xD': lambda t: [ospif(x) for x in t if ospif(x).file.is_dir()],
-                    'OxC': lambda t: [ospif(x) for x in t if ospif(x).file.suffix in sufx]
+                    '0xC': lambda t: [ospif(x) for x in t if ospif(x).file.suffix in sufx]
                 }
-                if sufx in typed.keys():
-                    tmp = typed[sufx](tmp)
+                if sufx & typed.keys():
+                    tmp = typed[sufx[0]](tmp)
                 else:
                     tmp = typed['0xC'](tmp)
 

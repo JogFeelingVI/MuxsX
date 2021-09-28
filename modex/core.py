@@ -251,7 +251,7 @@ class call:
                         nPath = ifs.nPath(n_Name)
                     # show diff file name
                         self.pfile_L(i, o_Name, n_Name)
-                        if self.__act_save():
+                        if self.__act_save() and nPath != None:
                             ifs.file.rename(nPath)
                     else:
                         self.pfile_L(i, o_Name)

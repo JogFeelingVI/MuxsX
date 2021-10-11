@@ -15,8 +15,8 @@ command.add_argument('--sn',
                      dest='sn',
                      help='serial number --sn or --sn N',
                      nargs='?',
-                     default=1,
-                     const=2)
+                     const=2,
+                     type=int)
 command.add_argument('-d',
                      dest='del',
                      metavar='delelt',

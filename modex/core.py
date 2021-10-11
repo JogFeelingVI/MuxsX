@@ -219,8 +219,9 @@ class call:
                 return tmp
 
     @classmethod
-    def __act_sn(cls, index: int, file: osp.ifile):
-        fls = cls.__Fix_args['sn']
+    def __act_sn(cls, index:int, file: osp.ifile):
+        ix = index + 1
+        fls = int(cls.__Fix_args['sn'])
         fls = fls if fls >= 2 else 2
         fmz = f'{{s:0{fls}}}'
         tmp = file.name
@@ -228,7 +229,7 @@ class call:
         if match is not None:
             return tmp
         else:
-            tmp = f'{fmz.format(s=index)}-{tmp}'
+            tmp = f'{fmz.format(s=ix)}-{tmp}'
             return tmp
 
     @classmethod

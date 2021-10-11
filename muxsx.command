@@ -13,14 +13,15 @@ command = argparse.ArgumentParser(prog='muxsx',
 command.add_argument('path', help=strings.paths.value, default='~/Downloads')
 command.add_argument('--sn',
                      dest='sn',
-                     help='serial number',
-                     action='store_const',
+                     help='serial number --sn or --sn N',
+                     nargs='?',
+                     default=1,
                      const=2)
 command.add_argument('-d',
                      dest='del',
                      metavar='delelt',
                      help=strings.dels.value,
-                     type=str)
+                     nargs='*')
 command.add_argument('-a',
                      dest='add',
                      metavar='add',
@@ -35,7 +36,7 @@ command.add_argument('-t',
                      dest='type',
                      metavar='Type',
                      help=strings.types.value,
-                     type=str)
+                     nargs='*')
 command.add_argument('--dx',
                      dest='dfx',
                      metavar='DeleteFile',

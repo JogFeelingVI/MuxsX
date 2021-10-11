@@ -5,7 +5,7 @@
 from enum import Enum as __EN
 
 class strings(__EN):
-    dels = 'Delete specified characters，Ex -d xxx or -d xxx,yyy,zzz'
+    dels = 'Delete specified characters，Ex -d xxx or -d xxx yyy zzz'
     paths = 'Specify the file path, which can be a folder or file name'
     test = 'NULL'
     addto = 'Add string to file name -a ddd or -a ddd@-5'

@@ -75,20 +75,26 @@ class call:
 
     @classmethod
     def __fix_type(cls, key, VALE):
-        if ',' in VALE:
-            cls.__Fix_args[key] = [f'.{x}' for x in VALE.split(',')]
-        elif 'f' == VALE:
+        '''
+            'type': ['mp3', 'avi'],
+        '''
+        if VALE is None:
             cls.__Fix_args[key] = ['0xF']
-        elif 'd' == VALE:
-            cls.__Fix_args[key] = ['0xD']
-        else:
-            cls.__Fix_args[key] = [f'.{VALE}']
+        elif isinstance(VALE, list):
+            tmp = []
+            for vx in VALE:
+                if vx == 'f' or vx == 'd':
+                    tmp.append(f'0x{str(vx).upper()}')
+                else:
+                    tmp.append(f'.{vx}')
+            cls.__Fix_args[key] = tmp
 
     @classmethod
     def __fix_ohes(cls, key, VALE):
         cls.__Fix_args[key] = VALE
 
     def __init__(self, args: dict = None):
+        #self.pinfo('Debug', f'Arges {args}')
         if (AT := type(args)) != dict:
             self.pinfo('Error',
                        f'Parameters must be of type dict, args-T is {AT}')
@@ -118,9 +124,13 @@ class call:
             else:
                 sufx = cls.__Fix_args['type']
                 typed = {
-                    '0xF': lambda t: [ospif(x) for x in t if ospif(x).file.is_file()],
-                    '0xD': lambda t: [ospif(x) for x in t if ospif(x).file.is_dir()],
-                    '0xC': lambda t: [ospif(x) for x in t if ospif(x).file.suffix in sufx]
+                    '0xF':
+                    lambda t: [ospif(x) for x in t if ospif(x).file.is_file()],
+                    '0xD':
+                    lambda t: [ospif(x) for x in t if ospif(x).file.is_dir()],
+                    '0xC':
+                    lambda t:
+                    [ospif(x) for x in t if ospif(x).file.suffix in sufx]
                 }
                 if sufx & typed.keys():
                     tmp = typed[sufx[0]](tmp)
@@ -176,7 +186,7 @@ class call:
 
     @classmethod
     def __act_del(cls, file: osp.ifile):
-        comar = cls.__Fix_args['del'].split(',')
+        comar = cls.__Fix_args['del']
         tmp = file.name
         for D in comar:
             #tmp = tmp.replace(D, '')
@@ -210,19 +220,19 @@ class call:
 
     @classmethod
     def __act_sn(cls, index: int, file: osp.ifile):
-        fls = 2
+        fls = cls.__Fix_args['sn']
+        fls = fls if fls >= 2 else 2
         fmz = f'{{s:0{fls}}}'
         tmp = file.name
         match = re.match('[\d]{2,}[-]', tmp)
         if match is not None:
-            pa, pb = match.span()
             return tmp
         else:
             tmp = f'{fmz.format(s=index)}-{tmp}'
             return tmp
-    
+
     @classmethod
-    def __act_r4(cls, oName:str):
+    def __act_r4(cls, oName: str):
         if 'ucode' in cls.__Fix_args.keys():
             r4 = cls.__Fix_args['ucode']
             tmp = f'{oName}{cls.__r4(r4)}'
@@ -249,7 +259,7 @@ class call:
                     n_Name = self.__act_r4(n_Name)
                     if o_Name != n_Name:
                         nPath = ifs.nPath(n_Name)
-                    # show diff file name
+                        # show diff file name
                         self.pfile_L(i, o_Name, n_Name)
                         if self.__act_save() and nPath != None:
                             ifs.file.rename(nPath)

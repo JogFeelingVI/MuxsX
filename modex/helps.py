@@ -10,7 +10,7 @@ class strings(__EN):
     test = 'NULL'
     addto = 'Add string to file name -a ddd or -a ddd@-5'
     reps = 'Replace the string specified in the file name -r xxx:yyyy'
-    types = 'Specify file type -type mp4 or -type "mp4,jpg"'
+    types = 'Specify file type -t mp4 or -t "mp4,jpg"'
     delxs = 'Read the file to delete the list, then modify the file -dx ~/deldict[file]'
     shows = 'show file list exp -s'
     desct = 'Multi-file renaming by jogfeelingvi'

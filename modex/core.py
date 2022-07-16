@@ -219,7 +219,7 @@ class call:
                 return tmp
 
     @classmethod
-    def __act_sn(cls, index:int, file: osp.ifile):
+    def __act_sn(cls, index: int, file: osp.ifile):
         ix = index + 1
         fls = int(cls.__Fix_args['sn'])
         fls = fls if fls >= 2 else 2

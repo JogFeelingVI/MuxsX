@@ -3,6 +3,7 @@
 # @Last Modified by:   By JogFeelingVi
 # @Last Modified time: 2021-08-18 15:12:58
 import pathlib as plib
+from pickle import FALSE
 from typing import Union
 
 
@@ -23,7 +24,7 @@ def find(p: plib.PosixPath = None):
     if p.is_file() == True:
         files = [p]
     elif p.is_dir():
-        files = [x for x in p.glob('*') ] # and x.name[0] not in ['.']
+        files = [x for x in p.glob('*')]  # and x.name[0] not in ['.']
         #if x.is_file() and x.name[0] not in ['.']
     return files
 
@@ -39,15 +40,17 @@ class ifile:
         self.sufx = self.file.suffix
         self.name = self.file.name.replace(self.sufx, '')
 
-    def nPath(self, nName:str):
+    def nPath(self, nName: str):
         '''
         file new name 
             n2p = osp.plib.Path(ifs.file.parent, n2)
         '''
         nPx = plib.Path(self.file.parent, f'{nName}{self.sufx}')
-        if nPx.exists() == False:
+        exfile = self.file.parent.glob('*.*')
+        nPx_exists = []
+        for exf in exfile:
+            nPx_exists.append(1 if exf == nPx else 0)
+        if sum(nPx_exists) == 0:
             return nPx
         else:
             return None
-
-    

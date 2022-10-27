@@ -9,7 +9,8 @@ from modex.helps import strings
 from modex.core import call
 
 command = argparse.ArgumentParser(prog='muxsx',
-                                  description=strings.desct.value)
+                                  description=strings.desct.value,
+                                  add_help=True)
 command.add_argument('path', help=strings.paths.value, default='~/Downloads')
 command.add_argument('--sn',
                      dest='sn',

@@ -29,8 +29,8 @@
   |*optional arguments:*||
   |-h, --help|show this help message and exit|
   |-d delete |Delete specified characters，Ex -d xxx or -d xxx yyy zzz|
-  |-a add|Add string to file name -a ddd or -a ddd@-5|
-  |-r Replace|Replace the string specified in the file name -r xxx:yyyy|
+  |-a add|Add string to file name -a ddd or -a ddd -5|
+  |-r Replace|Replace the string specified in the file name -r xxx yyyy|
   |-t type|Specify file type -t mp4 or -t mp4 mp3 avi ... f d|
   |--dx delete from file|Read the file to delete the list, then modify the file -dx ~/deldict[file]|
   |-F Filter|Regular expression filtering file list|

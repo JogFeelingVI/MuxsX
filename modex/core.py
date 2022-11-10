@@ -39,7 +39,7 @@ class call:
         'OxOO': lambda k, v: call.__fix_ohes(k, v),
     }
     __act = {
-        'add': lambda f: call.__act_add(f),
+        'addx': lambda f: call.__act_addx(f),
         'rep': lambda f: call.__act_rep(f),
         'del': lambda f: call.__act_del(f),
         'dfx': lambda f: call.__act_delete(f),
@@ -182,6 +182,16 @@ class call:
         tmp = list(file.name)
         tmp.insert(ix, sx)
         tmp = ''.join(tmp)
+        print(f'debug {sx} {ix}')
+        return tmp
+
+    @classmethod
+    def __act_addx(cls, file: osp.ifile):
+        sx, ix = cls.__Fix_args['addx']
+        ix = [ix, int(ix)][type(ix) is str]
+        tmp = list(file.name) 
+        tmp.insert(ix, sx)
+        tmp = ''.join(tmp)
         return tmp
 
     @classmethod
@@ -195,7 +205,7 @@ class call:
 
     @classmethod
     def __act_rep(cls, file: osp.ifile):
-        comar = cls.__Fix_args['rep'].split(':')
+        comar = cls.__Fix_args['rep']
         if len(comar) > 2:
             cls.pinfo('Error', '-r xxx:yyy Parameter error')
             return
@@ -244,7 +254,7 @@ class call:
     def action(self):
         if self.__files is None:
             return
-        actkeys = 'add,del,rep,dfx,sn'.split(',')
+        actkeys = 'addx,del,rep,dfx,sn'.split(',')
         for key in actkeys:
             if key in self.__Fix_args.keys():
                 for i, ifs in enumerate(self.__files):

@@ -24,13 +24,15 @@ command.add_argument('-d',
                      help=strings.dels.value,
                      nargs='*')
 command.add_argument('-a',
-                     dest='add',
-                     metavar='add',
+                     dest='addx',
+                     metavar='addx',
+                     nargs=2,
                      help=strings.addto.value,
                      type=str)
 command.add_argument('-r',
                      dest='rep',
                      metavar='replace',
+                     nargs=2,
                      help=strings.reps.value,
                      type=str)
 command.add_argument('-t',

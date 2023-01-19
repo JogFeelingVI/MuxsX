@@ -10,9 +10,9 @@ from . import osp
 
 
 def style(msg: Union[str, int, float],
-          mt: int = None,
-          fc: int = None,
-          bg: int = None) -> str:
+          mt: int,
+          fc: int,
+          bg: int) -> str:
     fmat = '\033[{code}{msg}\033[0m'
     switch = {0: '', 1: '{}m', 2: '{};{}m', 3: '{};{};{}m'}
 

@@ -6,8 +6,8 @@ authors = ["JogFeelingVI <lifelse@outlook.com>"]
 license = "GPL"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-yapf = "toml"
+python = "^3.10"
+yapf = "^0.32.0"
 toml = "^0.10.2"
 
 [tool.poetry.dev-dependencies]

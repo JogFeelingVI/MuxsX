@@ -3,23 +3,17 @@
 # @Last Modified by:   By JogFeelingVi
 # @Last Modified time: 2021-08-18 14:22:38
 import enum, re
-from os import path
 from pathlib import PosixPath
 from typing import List, Union
 from . import osp
 
 
-def style(msg: Union[str, int, float],
-          mt: int,
-          fc: int,
-          bg: int) -> str:
+def style(msg: str = '', mt: int = 0, fc: int = 0, bg: int = 0) -> str:
     fmat = '\033[{code}{msg}\033[0m'
     switch = {0: '', 1: '{}m', 2: '{};{}m', 3: '{};{};{}m'}
-
-    code = [x for x in [mt, fc, bg] if x != None and x != 0]
-    code_len = code.__len__()
-    code_f = switch.get(code_len).format(*code)
     msg = f'{msg}'
+    code = [x for x in [mt, fc, bg] if x != 0]
+    code_f = str(switch.get(len(code))).format(*code)
     return fmat.format(code=code_f, msg=msg)
 
 
@@ -31,7 +25,7 @@ yello = lambda m: style(m, 33)
 
 
 class call:
-    __Fix_args = {'var': 1.02}
+    __Fix_args = {'var': '1.02'}
     __files = None
     __fix = {
         'path': lambda k, v: call.__fix_path(k, v),
@@ -68,9 +62,9 @@ class call:
     @classmethod
     def __fix_path(cls, key, VALE):
         if (fix_item := osp.pathx(VALE)) is not None:
-            cls.__Fix_args[key] = fix_item
+            cls.__Fix_args.update({key: fix_item})
         else:
-            cls.__Fix_args[key] = None
+            cls.__Fix_args.update({key: None})
             cls.pinfo('Error', 'Path Directory does not exist')
 
     @classmethod
@@ -79,7 +73,7 @@ class call:
             'type': ['mp3', 'avi'],
         '''
         if VALE is None:
-            cls.__Fix_args[key] = ['0xF']
+            cls.__Fix_args.update({key: ['0xF']})
         elif isinstance(VALE, list):
             tmp = []
             for vx in VALE:
@@ -87,13 +81,13 @@ class call:
                     tmp.append(f'0x{str(vx).upper()}')
                 else:
                     tmp.append(f'.{vx}')
-            cls.__Fix_args[key] = tmp
+            cls.__Fix_args.update({key: tmp})
 
     @classmethod
     def __fix_ohes(cls, key, VALE):
-        cls.__Fix_args[key] = VALE
+        cls.__Fix_args.update({key: VALE})
 
-    def __init__(self, args: dict = None):
+    def __init__(self, args: dict):
         #self.pinfo('Debug', f'Arges {args}')
         if (AT := type(args)) != dict:
             self.pinfo('Error',
@@ -129,8 +123,7 @@ class call:
                     '0xD':
                     lambda t: [ospif(x) for x in t if ospif(x).file.is_dir()],
                     '0xC':
-                    lambda t:
-                    [ospif(x) for x in t if ospif(x).file.suffix in sufx]
+                    lambda t: [ospif(x) for x in t if ospif(x).sufx in sufx]
                 }
                 if sufx & typed.keys():
                     tmp = typed[sufx[0]](tmp)
@@ -189,7 +182,7 @@ class call:
     def __act_addx(cls, file: osp.ifile):
         sx, ix = cls.__Fix_args['addx']
         ix = [ix, int(ix)][type(ix) is str]
-        tmp = list(file.name) 
+        tmp = list(file.name)
         tmp.insert(ix, sx)
         tmp = ''.join(tmp)
         return tmp
@@ -235,7 +228,7 @@ class call:
         fls = fls if fls >= 2 else 2
         fmz = f'{{s:0{fls}}}'
         tmp = file.name
-        match = re.match('[\d]{2,}[-]', tmp)
+        match = re.match(r'[\d]{2,}[-]', tmp)
         if match is not None:
             return tmp
         else:
@@ -246,7 +239,7 @@ class call:
     def __act_r4(cls, oName: str):
         if 'ucode' in cls.__Fix_args.keys():
             r4 = cls.__Fix_args['ucode']
-            tmp = f'{oName}{cls.__r4(r4)}'
+            tmp = f'{oName}{cls.__r4(int(r4))}'
             return tmp
         else:
             return oName

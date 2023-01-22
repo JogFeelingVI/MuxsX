@@ -18,22 +18,19 @@ def pathx(p: str = '~/Downloads'):
     return path if path.exists() else None
 
 
-def find(p: plib.PosixPath = None):
-    if p is None:
-        return None
-    if p.is_file() == True:
-        files = [p]
-    elif p.is_dir():
-        files = [x for x in p.glob('*')]  # and x.name[0] not in ['.']
-        #if x.is_file() and x.name[0] not in ['.']
+def find(p: str) -> list:
+    files = []
+    _p = plib.PosixPath(p)
+    if p is not None:
+        if _p.is_file() == True:
+            files = [p]
+        elif _p.is_dir():
+            files = [x for x in _p.glob('*')]  # and x.name[0] not in ['.']
+            #if x.is_file() and x.name[0] not in ['.']
     return files
 
 
 class ifile:
-    file = None
-    sufx = None
-    name = None
-    newname = None
 
     def __init__(self, path: str) -> None:
         self.file = plib.PosixPath(path)

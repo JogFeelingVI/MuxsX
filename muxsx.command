@@ -11,7 +11,7 @@ from modex.core import call
 command = argparse.ArgumentParser(prog='muxsx',
                                   description=strings.desct.value,
                                   add_help=True)
-command.add_argument('path', help=strings.paths.value, default='~/Downloads')
+command.add_argument('path', help=strings.paths.value, type=str, default='~/Downloads')
 command.add_argument('--sn',
                      dest='sn',
                      help='serial number --sn or --sn N',

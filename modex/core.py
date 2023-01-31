@@ -17,11 +17,11 @@ def style(msg: str = '', mt: int = 0, fc: int = 0, bg: int = 0) -> str:
     return fmat.format(code=code_f, msg=msg)
 
 
-green = lambda m: style(m, 32)
-pink = lambda m: style(m, 35)
-blue = lambda m: style(m, 34)
-red = lambda m: style(m, 31)
-yello = lambda m: style(m, 33)
+green = lambda m: style(m, fc=32)
+pink = lambda m: style(m, fc=35)
+blue = lambda m: style(m, fc=34)
+red = lambda m: style(m, fc=31)
+yello = lambda m: style(m, fc=33)
 
 
 class call:
